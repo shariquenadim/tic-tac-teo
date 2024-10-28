@@ -112,6 +112,27 @@ var moves = 0,
     difficulty = 1,
     myGrid = null;
 
+
+// Load scores from local storage
+function loadScores() {
+    const savedScores = JSON.parse(localStorage.getItem("ticTacToeScores"));
+    if (savedScores) {
+        score = savedScores;
+    }
+}
+
+// Save scores to local storage
+function saveScores() {
+    localStorage.setItem("ticTacToeScores", JSON.stringify(score));
+}
+
+// Function to display current scores
+function displayScores() {
+    document.getElementById("player_score").innerText = score.player;
+    document.getElementById("computer_score").innerText = score.computer;
+    document.getElementById("tie_score").innerText = score.ties;
+}
+
 //==================================
 // GRID OBJECT
 //==================================
@@ -281,6 +302,8 @@ function initialize() {
         myGrid.cells[i] = 0;
     }
     // setTimeout(assignRoles, 500);
+    loadScores();
+    displayScores();
     setTimeout(showOptions, 500);
     // debugger;
 }
@@ -382,7 +405,7 @@ function makeComputerMove() {
     }
     var cell = -1,
         myArr = [],
-        corners = [0,2,6,8];
+        corners = [0, 2, 6, 8];
     if (moves >= 3) {
         cell = myGrid.getFirstWithTwoInARow(computer);
         if (cell === false) {
@@ -399,20 +422,20 @@ function makeComputerMove() {
         // Avoid a catch-22 situation:
         if (moves == 3 && myGrid.cells[4] == computer && player == x && difficulty == 1) {
             if (myGrid.cells[7] == player && (myGrid.cells[0] == player || myGrid.cells[2] == player)) {
-                myArr = [6,8];
-                cell = myArr[intRandom(0,1)];
+                myArr = [6, 8];
+                cell = myArr[intRandom(0, 1)];
             }
             else if (myGrid.cells[5] == player && (myGrid.cells[0] == player || myGrid.cells[6] == player)) {
-                myArr = [2,8];
-                cell = myArr[intRandom(0,1)];
+                myArr = [2, 8];
+                cell = myArr[intRandom(0, 1)];
             }
             else if (myGrid.cells[3] == player && (myGrid.cells[2] == player || myGrid.cells[8] == player)) {
-                myArr = [0,6];
-                cell = myArr[intRandom(0,1)];
+                myArr = [0, 6];
+                cell = myArr[intRandom(0, 1)];
             }
             else if (myGrid.cells[1] == player && (myGrid.cells[6] == player || myGrid.cells[8] == player)) {
-                myArr = [0,2];
-                cell = myArr[intRandom(0,1)];
+                myArr = [0, 2];
+                cell = myArr[intRandom(0, 1)];
             }
         }
         else if (moves == 3 && myGrid.cells[4] == player && player == x && difficulty == 1) {
@@ -431,7 +454,7 @@ function makeComputerMove() {
         }
     } else if (moves === 1 && myGrid.cells[4] == player && difficulty == 1) {
         // if player is X and played center, play one of the corners
-        cell = corners[intRandom(0,3)];
+        cell = corners[intRandom(0, 3)];
     } else if (moves === 2 && myGrid.cells[4] == player && computer == x && difficulty == 1) {
         // if player is O and played center, take two opposite corners
         if (myGrid.cells[0] == computer) {
@@ -446,9 +469,9 @@ function makeComputerMove() {
         else if (myGrid.cells[8] == computer) {
             cell = 0;
         }
-    } else if (moves === 0 && intRandom(1,10) < 8) {
+    } else if (moves === 0 && intRandom(1, 10) < 8) {
         // if computer is X, start with one of the corners sometimes
-        cell = corners[intRandom(0,3)];
+        cell = corners[intRandom(0, 3)];
     } else {
         // choose the center of the board if possible
         if (myGrid.cells[4] === 0 && difficulty == 1) {
@@ -503,8 +526,10 @@ function checkWin() {
                 var str = "cell" + tmpAr[j];
                 document.getElementById(str).classList.add("win-color");
             }
-            setTimeout(endGame, 1000, winner);
-            return winner;
+            setTimeout(() => {
+                saveScores(); // Save scores when the game ends
+                endGame(winner);
+            }, 1000);
         }
     }
 
@@ -527,8 +552,10 @@ function checkWin() {
                 var str = "cell" + tmpAr[j];
                 document.getElementById(str).classList.add("win-color");
             }
-            setTimeout(endGame, 1000, winner);
-            return winner;
+            setTimeout(() => {
+                saveScores(); // Save scores when the game ends
+                endGame(winner);
+            }, 1000);
         }
     }
 
@@ -551,7 +578,10 @@ function checkWin() {
                 var str = "cell" + tmpAr[j];
                 document.getElementById(str).classList.add("win-color");
             }
-            setTimeout(endGame, 1000, winner);
+            setTimeout(() => {
+                saveScores(); // Save scores when the game ends
+                endGame(winner);
+            }, 1000);
             return winner;
         }
     }
@@ -561,6 +591,7 @@ function checkWin() {
     if (myArr.length === 0) {
         winner = 10;
         score.ties++;
+        saveScores(); // Save scores when the game ends
         endGame(winner);
         return winner;
     }
