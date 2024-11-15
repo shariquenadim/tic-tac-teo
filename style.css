@@ -66,12 +66,13 @@ table {
   text-decoration: underline;
 }
 #restart {
-  font-size: 3em;
-  width: 1em;
+  font-size: 2em;
   height: 0.9em;
   cursor: pointer;
   margin: 0 auto;
-  overflow: hidden;
+  padding-bottom: 30px;
+  padding-top: 10px;
+  text-decoration: underline;
 }
 .x {
   color: darksalmon;
@@ -185,4 +186,52 @@ table {
   background: rgb(59, 59, 59);
 }
 
+.animation-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
 
+/* Game Options */
+.game-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 99%;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-options a{
+  text-decoration: none;
+  color: white;
+}
+
+.option {
+  padding: 15px 20px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: 2px solid white;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.option:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+  .option {
+    font-size: 1rem;
+    padding: 10px 15px;
+  }
+}
