@@ -1,86 +1,112 @@
-function makeComputerMove() {
-    if (gameOver) {
-        return false;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic Tac Toe</title>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('blackboard.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Your-Handwritten-Font', sans-serif;
+      color: white;
+      text-align: center;
     }
 
-    // Determine delay based on whether there's a winning move
-    let delay;
-    if (moves >= 3 && myGrid.getFirstWithTwoInARow(computer) !== false) {
-        delay = getRandomDelay(500, 1000); // Quick response if there's a winning move
-    } else {
-        delay = getRandomDelay(); // Random delay otherwise
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100vh;
+      gap: 20px;
+      padding: 20px;
     }
 
-    // Execute the move with the determined delay
-    setTimeout(() => {
-        var cell = -1,
-            myArr = [],
-            corners = [0, 2, 6, 8];
+    /* Animation Section */
+    .animation {
+      width: 250px;
+      height: 250px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+    }
 
-        if (moves >= 3) {
-            cell = myGrid.getFirstWithTwoInARow(computer);
-            if (cell === false) {
-                cell = myGrid.getFirstWithTwoInARow(player);
-            }
-            if (cell === false) {
-                if (myGrid.cells[4] === 0 && difficulty == 1) {
-                    cell = 4;
-                } else {
-                    myArr = myGrid.getFreeCellIndices();
-                    cell = myArr[intRandom(0, myArr.length - 1)];
-                }
-            }
+    /* Div Section for Buttons */
+    .game-options {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+    }
 
-            // Avoid a catch-22 situation
-            if (moves == 3 && myGrid.cells[4] == computer && player == x && difficulty == 1) {
-                if (myGrid.cells[7] == player && (myGrid.cells[0] == player || myGrid.cells[2] == player)) {
-                    myArr = [6, 8];
-                    cell = myArr[intRandom(0, 1)];
-                }
-                // Additional conditions you have remain unchanged here...
+    .game-option {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid white;
+      border-radius: 10px;
+      padding: 15px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      text-align: center;
+    }
 
-            } else if (moves === 1 && myGrid.cells[4] == player && difficulty == 1) {
-                cell = corners[intRandom(0, 3)];
-            } else if (moves === 2 && myGrid.cells[4] == player && computer == x && difficulty == 1) {
-                if (myGrid.cells[0] == computer) {
-                    cell = 8;
-                } else if (myGrid.cells[2] == computer) {
-                    cell = 6;
-                } else if (myGrid.cells[6] == computer) {
-                    cell = 2;
-                } else if (myGrid.cells[8] == computer) {
-                    cell = 0;
-                }
-            } else if (moves === 0 && intRandom(1, 10) < 8) {
-                cell = corners[intRandom(0, 3)];
-            } else {
-                if (myGrid.cells[4] === 0 && difficulty == 1) {
-                    cell = 4;
-                } else {
-                    myArr = myGrid.getFreeCellIndices();
-                    cell = myArr[intRandom(0, myArr.length - 1)];
-                }
-            }
-        }
+    .game-option:hover {
+      background: white;
+      color: black;
+      transform: scale(1.05);
+    }
 
-        var id = "cell" + cell.toString();
-        document.getElementById(id).innerHTML = computerText;
-        document.getElementById(id).style.cursor = "default";
+    /* Responsive Design */
+    @media (min-width: 768px) {
+      .container {
+        gap: 30px;
+      }
 
-        var rand = Math.random();
-        if (rand < 0.3) {
-            document.getElementById(id).style.transform = "rotate(180deg)";
-        } else if (rand > 0.6) {
-            document.getElementById(id).style.transform = "rotate(90deg)";
-        }
+      .game-options {
+        flex-direction: row;
+        justify-content: center;
+        gap: 20px;
+      }
 
-        myGrid.cells[cell] = computer;
-        moves += 1;
-        if (moves >= 5) {
-            winner = checkWin();
-        }
-        if (winner === 0 && !gameOver) {
-            whoseTurn = player;
-        }
-    }, delay);
-}
+      .game-option {
+        font-size: 20px;
+        padding: 20px;
+        width: 200px;
+      }
+
+      .animation {
+        width: 350px;
+        height: 350px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Animation Section -->
+    <lottie-player 
+      class="animation" 
+      src="animation.lottie" 
+      background="transparent" 
+      speed="1" 
+      loop 
+      autoplay>
+    </lottie-player>
+
+    <!-- Game Options Section -->
+    <div class="game-options">
+      <div class="game-option">Play with AI</div>
+      <div class="game-option">Play with Strangers</div>
+      <div class="game-option">Play with a Friend</div>
+    </div>
+  </div>
+</body>
+</html>
